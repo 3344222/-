@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><title>学生信息填报</title></head>
+<body>
+<h2>学生信息填报</h2>
+<form id="form">
+  学号：<input name="sid" required><br>
+  姓名：<input name="name" required><br>
+  班级：<input name="cls"><br>
+  手机：<input name="phone"><br>
+  <button type="submit">提交</button>
+</form>
+<p id="msg"></p>
+<script>
+document.getElementById('form').onsubmit = async function(e) {
+  e.preventDefault();
+  const data = new FormData(this);
+  // 替换成你电脑的IP和端口，例如 http://192.168.1.100:5000/submit
+  const resp = await fetch('http://你的电脑IP:5000/submit', {
+    method: 'POST',
+    body: new URLSearchParams(data)
+  });
+  document.getElementById('msg').innerText = await resp.text();
+};
+</script>
+</body>
+</html>
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><title>管理后台</title></head>
+<body>
+<h2>已填报数据</h2>
+<div id="data"></div>
+<script>
+async function load() {
+  const resp = await fetch('./data.json');
+  const rows = await resp.json();
+  let html = '<table border="1"><tr><th>学号</th><th>姓名</th><th>班级</th><th>手机</th></tr>';
+  rows.forEach(r => {
+    html += `<tr><td>${r.sid}</td><td>${r.name}</td><td>${r.cls}</td><td>${r.phone}</td></tr>`;
+  });
+  html += '</table>';
+  document.getElementById('data').innerHTML = html;
+}
+load();
+</script>
+</body>
+</html>
+[]
